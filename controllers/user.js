@@ -20,7 +20,7 @@ exports.create = async (req, res, next) => {
   try {
     const ret = await db.query(sqlStr)
     // 这里需要得到插入完的数据对象
-    const [user] = await db.query(`SELECT * FROM users WHERE id='${ret.insertId}'`)
+    const [user] = await db.query(`SELECT * FROM users WHERE id=${ret.insertId}`)
     res.status(201).json(user)
   } catch (err) {
     next(err)
