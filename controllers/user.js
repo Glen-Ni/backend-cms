@@ -1,8 +1,18 @@
 const md5 = require('blueimp-md5')
 const db = require('../models/db')
 
-exports.list = (req, res, next) => {
-
+exports.list = async (req, res, next) => {
+  try {
+    const query = req.query
+    let sqlStr = 'SELECT * FROM users WHERE 1=1'
+    // 不同请求拼接不同内容
+    for (let key in query) {
+      sqlStr += `and ${key}='${query[key]}'`
+    }
+    res.status(200).json(await db.query(sqlStr))
+  } catch (err) {
+    next(err)
+  }
 }
 
 exports.create = async (req, res, next) => {
@@ -10,7 +20,7 @@ exports.create = async (req, res, next) => {
   const sqlStr =
     `INSERT INTO users(username, password, email, nickname, avatar, gender)
     VALUES(
-      '${body.email}', 
+      '${body.email}',
       '${md5(md5(body.password))}',
       '${body.email}',
       '${body.nickname}',
@@ -27,15 +37,30 @@ exports.create = async (req, res, next) => {
   }
 }
 
-exports.update = (req, res, next) => {
-
+exports.update = async (req, res, next) => {
+  try {
+    const body = req.body
+    const { id } = req.params
+    const sqlStr =
+      `UPDATE users SET
+      username=${body.email}',
+      password='${md5(md5(body.password))},
+      email='${body.email}',
+     WHERE id=${id}`
+    await db.query(sqlStr)
+    const updatedUser = await db.query(`SELECT * FROM users WHERE id=${id}`)
+    res.status(201).json(updatedUser)
+  } catch (err) {
+    next(err)
+  }
 }
 
 exports.destory = (req, res, next) => {
   try {
     const { id } = req.params
     const sqlStr = `DELETE FROM topics WHERE id=${id}`
-    const ret = db.query(sqlStr)
+    db.query(sqlStr)
+    res.status(204).json({})
   } catch (err) {
     next(err)
   }
