@@ -7,9 +7,12 @@ exports.list = async (req, res, next) => {
     let sqlStr = 'SELECT * FROM users WHERE 1=1'
     // 不同请求拼接不同内容
     for (let key in query) {
-      sqlStr += `and ${key}='${query[key]}'`
+      sqlStr += ` and ${key}='${query[key]}'`
     }
-    res.status(200).json(await db.query(sqlStr))
+    console.log(sqlStr)
+    const ret = await db.query(sqlStr)
+    console.log(ret)
+    res.status(200).json(ret)
   } catch (err) {
     next(err)
   }

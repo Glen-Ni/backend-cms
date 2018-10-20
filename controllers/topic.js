@@ -10,10 +10,20 @@ exports.list = async (req, res, next) => {
     // 第二页 20, 20
     // 第三页 40, 20
     const sqlStr = `SELECT * FROM topics LIMIT ${(_page - 1) * _limit},${_limit}`
-
+    // 获取总数，返回值是数组，结构赋值套两层
+    const [{ count }] = await db.query(`SELECT COUNT(*) as count FROM topics`)
     const topics = await db.query(sqlStr)
-    console.log(topics)
-    res.status(200).json(topics)
+    res.status(200).json({ topics, count })
+  } catch (err) {
+    next(err)
+  }
+}
+
+exports.getTopicById = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const [topic] = await db.query(`SELECT * FROM topics WHERE id=${id}`)
+    res.status(200).json(topic)
   } catch (err) {
     next(err)
   }
@@ -42,6 +52,7 @@ exports.update = async (req, res, next) => {
   try {
     const body = req.body
     const { id } = req.params
+    console.log(body, id, 'rua')
     const sqlStr =
       `UPDATE topics SET title='${body.title}', content='${body.content}'
      WHERE id=${id}`

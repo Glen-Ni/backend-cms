@@ -53,6 +53,7 @@ router
  */
 router
   .get('/topics', topicController.list)
+  .get('/topics/:id', topicController.getTopicById)
   .post('/topics', checkLogin, topicController.create)
   .patch('/topics/:id', checkLogin, checkTopic, topicController.update)
   .delete('/topics/:id', checkLogin, checkTopic, topicController.destory)
@@ -67,7 +68,7 @@ router
   .delete('/comments/:id', checkLogin, commentController.destory)
 
 router
-  .get('/session', checkLogin, sessionController.get)
+  .get('/session', sessionController.get)
   .post('/session', sessionController.create)
   .delete('/session', sessionController.destory)
 

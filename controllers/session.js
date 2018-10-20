@@ -11,6 +11,13 @@ const md5 = require('blueimp-md5')
  */
 exports.get = (req, res, next) => {
   const { user } = req.session
+  if (!user) {
+    return res.status(401).json({
+      error: 'Unauthorized'
+    })
+  }
+  // console.log(user)
+  // console.log(user.nickname, ' logged in')
   res.status(200).json(user)
 }
 
@@ -30,7 +37,7 @@ exports.create = async (req, res, next) => {
     const ret = await db.query(sqlStr)
     // console.log(ret, '登录ret')
     const user = ret[0]
-    // console.log(user, 'user log in')
+    console.log(user.nickname, ' logged in')
     if (!user) {
       res.status(404).json({
         error: 'Invalid email or password'

@@ -10,14 +10,14 @@ const db = require('../models/db')
  */
 exports.list = async (req, res, next) => {
   try {
-    let { _page = 1, _limit = 20 } = req.query // get用query post用body！！！！
+    let { topic_id, _page = 1, _limit = 20 } = req.query // get用query post用body！！！！
     _page = _page < 1 ? 1 : _page
     _limit = _limit < 1 ? 1 : _limit
     _limit = _limit > 20 ? 20 : _limit
     // 第一页 0, 20(起始, 长度)
     // 第二页 20, 20
     // 第三页 40, 20
-    const sqlStr = `SELECT * FROM comments LIMIT ${(_page - 1) * _limit},${_limit}`
+    const sqlStr = `SELECT * FROM comments WHERE article_id=${topic_id} LIMIT ${(_page - 1) * _limit},${_limit}`
     const comments = await db.query(sqlStr)
     console.log(comments)
     res.status(200).json(comments)
