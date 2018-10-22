@@ -44,6 +44,7 @@ async function checkTopic(req, res, next) {
  */
 router
   .get('/users', userController.list)
+  .get('/users/:id', userController.list)
   .post('/users', userController.create)
   .patch('/users/:id', userController.update)
   .delete('/users/:id', userController.destory)

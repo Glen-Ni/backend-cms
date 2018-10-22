@@ -9,7 +9,7 @@ exports.list = async (req, res, next) => {
     // 第一页 0, 20(起始, 长度)
     // 第二页 20, 20
     // 第三页 40, 20
-    const sqlStr = `SELECT * FROM topics LIMIT ${(_page - 1) * _limit},${_limit}`
+    const sqlStr = `SELECT * FROM topics ORDER BY id desc LIMIT ${(_page - 1) * _limit},${_limit}`
     // 获取总数，返回值是数组，结构赋值套两层
     const [{ count }] = await db.query(`SELECT COUNT(*) as count FROM topics`)
     const topics = await db.query(sqlStr)
@@ -33,11 +33,10 @@ exports.create = async (req, res, next) => {
   try {
     const body = req.body
     const { user } = req.session
-    body.user_id = user.id
     const sqlStr =
-      `INSERT INTO topics(title, content, user_id)
+      `INSERT INTO topics(title, content, user_id, user_nickname)
     VALUES(
-      '${body.title}', '${body.content}', ${body.user_id})`
+      '${body.title}', '${body.content}', ${user.id}, '${user.nickname}')`
     const ret = await db.query(sqlStr)
     // 此处ret是okPacket对象
     const [topic] = await db.query(`SELECT * FROM topics WHERE id=${ret.insertId}`)
