@@ -19,7 +19,7 @@ exports.list = async (req, res, next) => {
     // 第三页 40, 20
     const sqlStr = `SELECT * FROM comments WHERE article_id=${topic_id} LIMIT ${(_page - 1) * _limit},${_limit}`
     const comments = await db.query(sqlStr)
-    console.log(comments)
+    // console.log(comments)
     res.status(200).json(comments)
   } catch (err) {
     next(err)

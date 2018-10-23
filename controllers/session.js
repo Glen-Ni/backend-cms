@@ -37,12 +37,12 @@ exports.create = async (req, res, next) => {
     const ret = await db.query(sqlStr)
     // console.log(ret, '登录ret')
     const user = ret[0]
-    console.log(user.nickname, ' logged in')
     if (!user) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'Invalid email or password'
       })
     }
+    // console.log(user.nickname, ' logged in')
     req.session.user = user
     res.status(201).json(user)
   } catch (err) {

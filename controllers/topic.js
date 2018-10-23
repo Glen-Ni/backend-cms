@@ -51,7 +51,7 @@ exports.update = async (req, res, next) => {
   try {
     const body = req.body
     const { id } = req.params
-    console.log(body, id, 'rua')
+    // console.log(body, id, 'rua')
     const sqlStr =
       `UPDATE topics SET title='${body.title}', content='${body.content}'
      WHERE id=${id}`

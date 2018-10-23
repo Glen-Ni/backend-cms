@@ -9,9 +9,7 @@ exports.list = async (req, res, next) => {
     for (let key in query) {
       sqlStr += ` and ${key}='${query[key]}'`
     }
-    console.log(sqlStr)
     const ret = await db.query(sqlStr)
-    console.log(ret)
     res.status(200).json(ret)
   } catch (err) {
     next(err)
